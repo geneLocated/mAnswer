@@ -11,7 +11,6 @@ namespace MatchAnswer
     [Activity(Label = "MatchAnswer", MainLauncher = true, Icon = "@mipmap/icon")]
     public class MainActivity : Activity
     {
-        int count = 1;
         List<string> strQuest = new List<string>();
         List<string> strAns = new List<string>();
 
@@ -24,12 +23,10 @@ namespace MatchAnswer
 
             // Get our button from the layout resource,
             // and attach an event to it
-            Button button = FindViewById<Button>(Resource.Id.myButton);
-
-            button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+            Button switchButton = FindViewById<Button>(Resource.Id.switchButton);
 
             GetQA();
-             string answer = FindInAns(FindInQuest("实施乡村振兴战略。____问题是关"));
+            string answer = FindInAns(FindInQuest("实施乡村振兴战略。____问题是关"));
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
                 .SetMessage(answer);
             alertDialog.Show();

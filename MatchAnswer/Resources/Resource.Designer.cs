@@ -45,7 +45,7 @@ namespace MatchAnswer
 		{
 			
 			// aapt resource value: 0x7f050000
-			public const int myButton = 2131034112;
+			public const int switchButton = 2131034112;
 			
 			static Id()
 			{
@@ -92,11 +92,14 @@ namespace MatchAnswer
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int app_name = 2130968577;
+			// aapt resource value: 0x7f040002
+			public const int app_name = 2130968578;
 			
 			// aapt resource value: 0x7f040000
-			public const int hello = 2130968576;
+			public const int start = 2130968576;
+			
+			// aapt resource value: 0x7f040001
+			public const int stop = 2130968577;
 			
 			static String()
 			{
