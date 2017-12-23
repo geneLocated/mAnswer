@@ -28,6 +28,7 @@ namespace MatchAnswer
 
             button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
             GetQA();
+            FindInQuest("实施乡村振兴战略。____问题是关");
         }
 
         private List<string> GetFromAssets(string fileName)
@@ -47,10 +48,21 @@ namespace MatchAnswer
             strAns = GetFromAssets("Answer.txt");
         }
 
-        /*private string FindInQuest()
+        private string FindInQuest(string target)   //返回包含该字符串的题目序号
         {
-            //foreach(string )
-        }*/
+            string result = null;
+            foreach (string currLine in strQuest)
+                if (currLine.Contains(target))
+                {
+                    int stopIndex;
+                    if (currLine.Contains("．")) //若存在"．"
+                        stopIndex = currLine.LastIndexOf("．");
+                    else
+                        stopIndex = currLine.LastIndexOf(".");
+                    result = currLine.Substring(0, stopIndex);
+                }
+            return result;
+        }
     }
 }
 
