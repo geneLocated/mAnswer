@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Content.Res;
 
 using System.IO;
+using System.Collections.Generic;
 
 namespace MatchAnswer
 {
@@ -11,8 +12,8 @@ namespace MatchAnswer
     public class MainActivity : Activity
     {
         int count = 1;
-        string strQuest;
-        string strAns;
+        List<string> strQuest = new List<string>();
+        List<string> strAns = new List<string>();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -29,12 +30,14 @@ namespace MatchAnswer
             GetQA();
         }
 
-        private string GetFromAssets(string fileName)
+        private List<string> GetFromAssets(string fileName)
         {
-            string result;
+            List<string> result = new List<string>();
             AssetManager assetManager = this.Assets;
             StreamReader streamReader = new StreamReader(Assets.Open(fileName));
-            result = streamReader.ReadToEnd();
+            string currLine;
+            while((currLine=streamReader.ReadLine()) != null)
+                result.Add(currLine);
             return result;
         }
 
@@ -43,6 +46,11 @@ namespace MatchAnswer
             strQuest = GetFromAssets("Question.txt");
             strAns = GetFromAssets("Answer.txt");
         }
+
+        /*private string FindInQuest()
+        {
+            //foreach(string )
+        }*/
     }
 }
 
