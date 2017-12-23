@@ -2,6 +2,7 @@
 using Android.Widget;
 using Android.OS;
 using Android.Content.Res;
+using Android.Content;
 
 using System.IO;
 using System.Collections.Generic;
@@ -13,25 +14,25 @@ namespace MatchAnswer
     {
         List<string> strQuest = new List<string>();
         List<string> strAns = new List<string>();
+        ClipboardManager clipboard;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-
-            // Get our button from the layout resource,
-            // and attach an event to it
+            // Get our button from the layout resource, and attach an event to it
             Button switchButton = FindViewById<Button>(Resource.Id.switchButton);
 
             GetQA();
-            string answer = FindInAns(FindInQuest("实施乡村振兴战略。____问题是关"));
+            InitClipboard();
+            string clipText = clipboard.Text;
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
-                .SetMessage(answer);
+                .SetMessage(clipText);
             alertDialog.Show();
         }
 
+        #region TextProcessPart
         private List<string> GetFromAssets(string fileName)
         {
             List<string> result = new List<string>();
@@ -79,6 +80,14 @@ namespace MatchAnswer
                 }
             return result;
         }
+        #endregion
+
+        #region ClipPart
+        private void InitClipboard()
+        {
+            clipboard = (ClipboardManager)GetSystemService(Context.ClipboardService);
+        }
+        #endregion
     }
 }
 
