@@ -1,15 +1,17 @@
-﻿
-
-using Android.App;
+﻿using Android.App;
 using Android.Widget;
 using Android.OS;
 using Android.Content.Res;
 using Android.Content;
+using Android.Views;
+using Android.Runtime;
+using Android.Graphics;
+using Android.Graphics.Drawables;
+using Android.Graphics.Drawables.Shapes;
 
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
-using Java.Lang;
 
 namespace MatchAnswer
 {
@@ -125,6 +127,14 @@ namespace MatchAnswer
     public class FloatWindowService : Service
     {
         private Timer timer;
+        LinearLayout floatLayout;   //浮动窗口布局
+        private IWindowManager WindowManager
+        {
+            get
+            {   //不是简单的类型转换，一定要用 JavaCast
+                return this.GetSystemService(Context.WindowService).JavaCast<IWindowManager>();
+            }
+        }
 
         public override IBinder OnBind(Intent intent)   //必须重写的方法
         {
@@ -133,6 +143,7 @@ namespace MatchAnswer
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
+            CreateFloatWindow();
             if (timer == null)  //开启定时器
                 timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
             return base.OnStartCommand(intent, flags, startId);
@@ -141,6 +152,26 @@ namespace MatchAnswer
         public override void OnDestroy()
         {
             base.OnDestroy();
+        }
+
+        private void CreateFloatWindow()
+        {
+            this.floatLayout = new LinearLayout(this);
+            var shape = new OvalShape();
+            var dr = new ShapeDrawable(shape);
+            dr.Paint.Color = Color.WhiteSmoke;
+            dr.Paint.Alpha = 100;
+            this.floatLayout.Background = dr;
+            var param = new WindowManagerLayoutParams
+            {
+                Width = 100,
+                Height = 100,
+                Gravity = GravityFlags.Top | GravityFlags.Left,
+                Flags = WindowManagerFlags.NotFocusable,
+                Type = WindowManagerTypes.Phone,
+                Format = Android.Graphics.Format.Transparent
+            };
+            this.WindowManager.AddView(this.floatLayout, param);
         }
 
         private void Timer_Tick(object sender)
