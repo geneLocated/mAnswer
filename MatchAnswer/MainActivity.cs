@@ -30,23 +30,50 @@ namespace MatchAnswer
             startButton.Click += StartButton_Click;
             stopButton.Click += StopButton_Click;
             //GetQA();
-            //InitClipboard();
         }
 
         private void StopButton_Click(object sender, System.EventArgs e)
         {
-            Intent serviceIntent = new Intent(this, typeof(FloatWindowService));
-            StopService(serviceIntent);    //停止服务
+            MWindowManager.RemoveView(floatLayout);
             startButton.Enabled = true;
             stopButton.Enabled = false;
         }
 
         private void StartButton_Click(object sender, System.EventArgs e)
         {
-            Intent serviceIntent=new Intent(this, typeof(FloatWindowService));
-            StartService(serviceIntent);    //启动服务
+            CreateFloatWindow();
+            InitClipboard();
             startButton.Enabled = false;
             stopButton.Enabled = true;
+        }
+
+        LinearLayout floatLayout;   //浮动窗口布局
+        private IWindowManager MWindowManager
+        {
+            get
+            {   //不是简单的类型转换，一定要用 JavaCast
+                return this.GetSystemService(Context.WindowService).JavaCast<IWindowManager>();
+            }
+        }
+        private void CreateFloatWindow()
+        {
+            this.floatLayout = new LinearLayout(this);
+            var shape = new OvalShape();
+            var dr = new ShapeDrawable(shape);
+            dr.Paint.Color = Color.WhiteSmoke;
+            dr.Paint.Alpha = 100;
+            floatLayout.Background = dr;
+
+            var param = new WindowManagerLayoutParams
+            {
+                Type = WindowManagerTypes.Phone,
+                Format = Android.Graphics.Format.Transparent,
+                Gravity = GravityFlags.Top | GravityFlags.Left, //原点
+                Flags = WindowManagerFlags.NotFocusable,    //不可聚焦
+                Width = 100,    //宽度
+                Height = 100,   //高度
+            };
+            this.MWindowManager.AddView(this.floatLayout, param);
         }
 
         #region TextProcessPart
@@ -125,78 +152,15 @@ namespace MatchAnswer
                 clipText = clipboard.Text;
                 if (clipText != lastClipText)
                 {
-                    ShowAlert(clipText);
+                    floatLayout.RemoveAllViews();
+                    TextView tv = new TextView(this);
+                    tv.Text = clipText;
+                    floatLayout.AddView(tv);
                 }
                 lastClipText = clipText;
             });
         }
         #endregion
-    }
-
-    [Service(Name = "MatchAnswer.MatchAnswer.FloatWindowService")]
-    public class FloatWindowService : Service
-    {
-        private Timer timer;
-        LinearLayout floatLayout;   //浮动窗口布局
-        private IWindowManager WindowManager
-        {
-            get
-            {   //不是简单的类型转换，一定要用 JavaCast
-                return this.GetSystemService(Context.WindowService).JavaCast<IWindowManager>();
-            }
-        }
-
-        public override IBinder OnBind(Intent intent)   //必须重写的方法
-        {
-            return null;
-        }
-
-        public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
-        {
-            CreateFloatWindow();
-            if (timer == null)  //开启定时器
-                timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
-            return base.OnStartCommand(intent, flags, startId);
-        }
-
-        public override void OnDestroy()
-        {
-            WindowManager.RemoveView(floatLayout);
-            floatLayout = null;
-            base.OnDestroy();
-        }
-
-        private void CreateFloatWindow()
-        {
-            this.floatLayout = new LinearLayout(this);
-            var shape = new OvalShape();
-            var dr = new ShapeDrawable(shape);
-            dr.Paint.Color = Color.WhiteSmoke;
-            dr.Paint.Alpha = 100;
-            floatLayout.Background = dr;
-
-            var param = new WindowManagerLayoutParams
-            {
-                Type = WindowManagerTypes.Phone,
-                Format = Android.Graphics.Format.Transparent,
-                Gravity = GravityFlags.Top | GravityFlags.Left, //原点
-                Flags = WindowManagerFlags.NotFocusable,    //不可聚焦
-                Width = 100,    //宽度
-                Height = 100,   //高度
-            };
-            this.WindowManager.AddView(this.floatLayout, param);
-
-            TextView floatTextView = new TextView(this)
-            {
-                Text = "ANS",
-            };
-            floatLayout.AddView(floatTextView);
-        }
-
-        private void Timer_Tick(object sender)
-        {
-            
-        }
     }
 }
 
