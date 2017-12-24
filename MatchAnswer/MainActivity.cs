@@ -6,6 +6,8 @@ using Android.Content;
 
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
+using Java.Lang;
 
 namespace MatchAnswer
 {
@@ -14,7 +16,10 @@ namespace MatchAnswer
     {
         List<string> strQuest = new List<string>();
         List<string> strAns = new List<string>();
+        string clipText;
+        string lastClipText;
         ClipboardManager clipboard;
+        Button switchButton;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -22,14 +27,11 @@ namespace MatchAnswer
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
             // Get our button from the layout resource, and attach an event to it
-            Button switchButton = FindViewById<Button>(Resource.Id.switchButton);
+            switchButton = FindViewById<Button>(Resource.Id.switchButton);
 
             GetQA();
             InitClipboard();
-            string clipText = clipboard.Text;
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
-                .SetMessage(clipText);
-            alertDialog.Show();
+
         }
 
         #region TextProcessPart
@@ -86,6 +88,27 @@ namespace MatchAnswer
         private void InitClipboard()
         {
             clipboard = (ClipboardManager)GetSystemService(Context.ClipboardService);
+            Timer timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
+        }
+
+        void ShowAlert(string str)
+        {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.SetMessage(str);
+            alertDialog.Show();
+        }
+
+        public void Timer_Tick(object sender)
+        {
+            RunOnUiThread(() =>
+            {
+                clipText = clipboard.Text;
+                if (clipText != lastClipText)
+                {
+                    ShowAlert(clipText);
+                }
+                lastClipText = clipText;
+            });
         }
         #endregion
     }
