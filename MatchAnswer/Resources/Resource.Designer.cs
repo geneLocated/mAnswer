@@ -51,7 +51,10 @@ namespace MatchAnswer
 			public const int floatWindow = 2131034112;
 			
 			// aapt resource value: 0x7f050002
-			public const int switchButton = 2131034114;
+			public const int startButton = 2131034114;
+			
+			// aapt resource value: 0x7f050003
+			public const int stopButton = 2131034115;
 			
 			static Id()
 			{

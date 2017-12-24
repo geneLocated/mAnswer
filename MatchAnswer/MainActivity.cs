@@ -23,25 +23,35 @@ namespace MatchAnswer
         string clipText;
         string lastClipText;
         ClipboardManager clipboard;
-        Button switchButton;
+        Button startButton;
+        Button stopButton;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-            // Get our button from the layout resource, and attach an event to it
-            switchButton = FindViewById<Button>(Resource.Id.switchButton);
-            switchButton.Click += SwitchButton_Click;
+            startButton = FindViewById<Button>(Resource.Id.startButton);
+            stopButton = FindViewById<Button>(Resource.Id.stopButton);
+            startButton.Click += StartButton_Click;
+            stopButton.Click += StopButton_Click;
             GetQA();
             //InitClipboard();
         }
 
-        private void SwitchButton_Click(object sender, System.EventArgs e)
+        private void StopButton_Click(object sender, System.EventArgs e)
+        {
+            Intent serviceIntent = new Intent(this, typeof(FloatWindowService));
+            StopService(serviceIntent);    //停止服务
+            startButton.Enabled = true;
+            stopButton.Enabled = false;
+        }
+
+        private void StartButton_Click(object sender, System.EventArgs e)
         {
             Intent serviceIntent=new Intent(this, typeof(FloatWindowService));
-            StartService(serviceIntent);
-            switchButton.Text = Resources.GetString(Resource.String.stop);
+            StartService(serviceIntent);    //启动服务
+            startButton.Enabled = false;
+            stopButton.Enabled = true;
         }
 
         #region TextProcessPart
