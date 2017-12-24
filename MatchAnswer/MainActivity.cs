@@ -29,15 +29,9 @@ namespace MatchAnswer
             stopButton = FindViewById<Button>(Resource.Id.stopButton);
             startButton.Click += StartButton_Click;
             stopButton.Click += StopButton_Click;
-            //GetQA();
+            GetQA();
         }
 
-        private void StopButton_Click(object sender, System.EventArgs e)
-        {
-            MWindowManager.RemoveView(floatLayout);
-            startButton.Enabled = true;
-            stopButton.Enabled = false;
-        }
 
         private void StartButton_Click(object sender, System.EventArgs e)
         {
@@ -45,6 +39,19 @@ namespace MatchAnswer
             InitClipboard();
             startButton.Enabled = false;
             stopButton.Enabled = true;
+        }
+
+        private void StopButton_Click(object sender, System.EventArgs e)
+        {
+            MWindowManager.RemoveView(floatLayout);
+            floatLayout.Dispose();
+            floatLayout = null;
+            timer.Dispose();
+            timer = null;
+            clipboard.Dispose();
+            clipboard = null;
+            startButton.Enabled = true;
+            stopButton.Enabled = false;
         }
 
         LinearLayout floatLayout;   //浮动窗口布局
@@ -130,19 +137,13 @@ namespace MatchAnswer
 
         #region ClipPart
         ClipboardManager clipboard;
+        Timer timer;
         string clipText;
         string lastClipText;
         private void InitClipboard()
         {
             clipboard = (ClipboardManager)GetSystemService(Context.ClipboardService);
-            Timer timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
-        }
-
-        void ShowAlert(string str)
-        {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.SetMessage(str);
-            alertDialog.Show();
+            timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
         }
 
         public void Timer_Tick(object sender)
@@ -152,9 +153,14 @@ namespace MatchAnswer
                 clipText = clipboard.Text;
                 if (clipText != lastClipText)
                 {
-                    floatLayout.RemoveAllViews();
                     TextView tv = new TextView(this);
-                    tv.Text = clipText;
+                    try
+                    {
+                        string answer = FindInAns(FindInQuest(clipText));
+                        tv.Text = answer;
+                    }
+                    catch { tv.Text = "null"; }
+                    floatLayout.RemoveAllViews();
                     floatLayout.AddView(tv);
                 }
                 lastClipText = clipText;
