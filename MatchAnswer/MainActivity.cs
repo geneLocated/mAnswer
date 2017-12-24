@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿
+
+using Android.App;
 using Android.Widget;
 using Android.OS;
 using Android.Content.Res;
@@ -28,9 +30,16 @@ namespace MatchAnswer
             SetContentView(Resource.Layout.Main);
             // Get our button from the layout resource, and attach an event to it
             switchButton = FindViewById<Button>(Resource.Id.switchButton);
-
+            switchButton.Click += SwitchButton_Click;
             GetQA();
-            InitClipboard();
+            //InitClipboard();
+        }
+
+        private void SwitchButton_Click(object sender, System.EventArgs e)
+        {
+            Intent serviceIntent=new Intent(this, typeof(FloatWindowService));
+            StartService(serviceIntent);
+            switchButton.Text = Resources.GetString(Resource.String.stop);
         }
 
         #region TextProcessPart
@@ -112,6 +121,7 @@ namespace MatchAnswer
         #endregion
     }
 
+    [Service(Name = "MatchAnswer.MatchAnswer.FloatWindowService")]
     public class FloatWindowService : Service
     {
         private Timer timer;
@@ -135,7 +145,7 @@ namespace MatchAnswer
 
         private void Timer_Tick(object sender)
         {
-
+            
         }
     }
 }
