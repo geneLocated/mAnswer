@@ -18,11 +18,6 @@ namespace MatchAnswer
     [Activity(Label = "MatchAnswer", MainLauncher = true, Icon = "@mipmap/icon")]
     public class MainActivity : Activity
     {
-        List<string> strQuest = new List<string>();
-        List<string> strAns = new List<string>();
-        string clipText;
-        string lastClipText;
-        ClipboardManager clipboard;
         Button startButton;
         Button stopButton;
 
@@ -34,7 +29,7 @@ namespace MatchAnswer
             stopButton = FindViewById<Button>(Resource.Id.stopButton);
             startButton.Click += StartButton_Click;
             stopButton.Click += StopButton_Click;
-            GetQA();
+            //GetQA();
             //InitClipboard();
         }
 
@@ -55,6 +50,8 @@ namespace MatchAnswer
         }
 
         #region TextProcessPart
+        List<string> strQuest = new List<string>();
+        List<string> strAns = new List<string>();
         private List<string> GetFromAssets(string fileName)
         {
             List<string> result = new List<string>();
@@ -105,6 +102,9 @@ namespace MatchAnswer
         #endregion
 
         #region ClipPart
+        ClipboardManager clipboard;
+        string clipText;
+        string lastClipText;
         private void InitClipboard()
         {
             clipboard = (ClipboardManager)GetSystemService(Context.ClipboardService);
@@ -161,6 +161,8 @@ namespace MatchAnswer
 
         public override void OnDestroy()
         {
+            WindowManager.RemoveView(floatLayout);
+            floatLayout = null;
             base.OnDestroy();
         }
 
