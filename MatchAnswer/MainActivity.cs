@@ -31,7 +31,6 @@ namespace MatchAnswer
 
             GetQA();
             InitClipboard();
-
         }
 
         #region TextProcessPart
@@ -111,6 +110,33 @@ namespace MatchAnswer
             });
         }
         #endregion
+    }
+
+    public class FloatWindowService : Service
+    {
+        private Timer timer;
+
+        public override IBinder OnBind(Intent intent)   //必须重写的方法
+        {
+            return null;
+        }
+
+        public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
+        {
+            if (timer == null)  //开启定时器
+                timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
+            return base.OnStartCommand(intent, flags, startId);
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
+
+        private void Timer_Tick(object sender)
+        {
+
+        }
     }
 }
 
