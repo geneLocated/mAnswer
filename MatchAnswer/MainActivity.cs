@@ -161,17 +161,24 @@ namespace MatchAnswer
             var dr = new ShapeDrawable(shape);
             dr.Paint.Color = Color.WhiteSmoke;
             dr.Paint.Alpha = 100;
-            this.floatLayout.Background = dr;
+            floatLayout.Background = dr;
+
             var param = new WindowManagerLayoutParams
             {
-                Width = 100,
-                Height = 100,
-                Gravity = GravityFlags.Top | GravityFlags.Left,
-                Flags = WindowManagerFlags.NotFocusable,
                 Type = WindowManagerTypes.Phone,
-                Format = Android.Graphics.Format.Transparent
+                Format = Android.Graphics.Format.Transparent,
+                Gravity = GravityFlags.Top | GravityFlags.Left, //原点
+                Flags = WindowManagerFlags.NotFocusable,    //不可聚焦
+                Width = 100,    //宽度
+                Height = 100,   //高度
             };
             this.WindowManager.AddView(this.floatLayout, param);
+
+            TextView floatTextView = new TextView(this)
+            {
+                Text = "ANS",
+            };
+            floatLayout.AddView(floatTextView);
         }
 
         private void Timer_Tick(object sender)
