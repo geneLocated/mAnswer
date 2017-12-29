@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace 匹配答案
 {
@@ -17,9 +18,13 @@ namespace 匹配答案
             InitializeComponent();
         }
 
+        List<string> questLib = new List<string>();
+        List<string> ansLib = new List<string>();
+
         private void startButton_Click(object sender, EventArgs e)
         {
-            GetQuest();
+            ReadQA();
+            //GetQuest();
             //ClickAns("A");
             //ClickSend();
         }
@@ -65,6 +70,18 @@ namespace 匹配答案
                     }
             }
             return str;
+        }
+
+        private void ReadQA()
+        {
+            //将题库文件读入List
+            StreamReader sr = new StreamReader("Question.txt");
+            string currLine;
+            while ((currLine = sr.ReadLine()) != null)
+                questLib.Add(currLine);
+            sr = new StreamReader("Answer.txt");
+            while ((currLine = sr.ReadLine()) != null)
+                ansLib.Add(currLine);
         }
     }
 }
