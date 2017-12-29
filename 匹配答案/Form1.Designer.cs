@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.startButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // webBrowser1
@@ -62,6 +64,11 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "http://jyj.hizh.cn/index.php?s=/addon/AnswerDraw/Wapapi/PCzhjy.html";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 10;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -82,6 +89,7 @@
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
