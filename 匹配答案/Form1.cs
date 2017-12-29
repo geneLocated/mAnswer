@@ -19,8 +19,9 @@ namespace 匹配答案
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            ClickAns("A");
-            ClickSend();
+            GetQuest();
+            //ClickAns("A");
+            //ClickSend();
         }
 
         private void ClickSend()
@@ -47,6 +48,23 @@ namespace 匹配答案
                         break;  //有很多答案按钮，这里点击第一个就可以了
                     }
             }
+        }
+
+        private string GetQuest()
+        {
+            //获取最后一个问题
+            HtmlElementCollection questDiv = webBrowser1.Document.GetElementsByTagName("div");
+            string str = null;
+            foreach (HtmlElement item in questDiv)
+            {
+                if (item.GetAttribute("className") == "answer_text")
+                    if (item.FirstChild.InnerText.Contains("."))    //避免识别到“恭喜你答对了”
+                    {
+                        str = item.FirstChild.InnerText;
+                        str = str.Substring(str.IndexOf(".") + 1, str.IndexOf("\n"));
+                    }
+            }
+            return str;
         }
     }
 }
