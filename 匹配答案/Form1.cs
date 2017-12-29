@@ -23,13 +23,10 @@ namespace 匹配答案
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            ReadQA();
-            MessageBox.Show(FindInAns(FindInQuest("有序政治参与，保证人民依法实行民主选举、民")));
-            //GetQuest();
-            //ClickAns("A");
-            //ClickSend();
+
         }
 
+        #region 网页操作
         private void ClickSend()
         {
             //实现点击发送按钮
@@ -72,7 +69,9 @@ namespace 匹配答案
             }
             return str;
         }
+        #endregion
 
+        #region 题库操作
         private void ReadQA()
         {
             //将题库文件读入List
@@ -119,5 +118,6 @@ namespace 匹配答案
             }
             return result;
         }
+        #endregion
     }
 }
