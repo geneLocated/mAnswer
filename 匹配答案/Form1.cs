@@ -24,6 +24,7 @@ namespace 匹配答案
         private void startButton_Click(object sender, EventArgs e)
         {
             ReadQA();
+            MessageBox.Show(FindInAns(FindInQuest("有序政治参与，保证人民依法实行民主选举、民")));
             //GetQuest();
             //ClickAns("A");
             //ClickSend();
@@ -96,6 +97,24 @@ namespace 匹配答案
                 {
                     int stopIndex = currLine.IndexOf(".");
                     result = currLine.Substring(0, stopIndex);
+                }
+            }
+            return result;
+        }
+
+        private string FindInAns(string order)
+        {
+            //根据题号找答案
+            string result = null;
+            foreach (string currLine in ansLib)
+            {
+                if(currLine.Contains(order))
+                {
+                    int targetIndex = currLine.IndexOf(order);
+                    //从序号后开始查找"."
+                    int startIndex = currLine.IndexOf(".", targetIndex) + 1;
+                    int stopIndex = currLine.IndexOf("  ", startIndex + 1);
+                    result = currLine.Substring(startIndex, stopIndex - startIndex);
                 }
             }
             return result;
