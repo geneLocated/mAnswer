@@ -83,5 +83,22 @@ namespace 匹配答案
             while ((currLine = sr.ReadLine()) != null)
                 ansLib.Add(currLine);
         }
+
+        private string FindInQuest(string value)
+        {
+            //根据内容找题号
+            string result = null;
+            value = value.Replace(" ", ""); //去除值中的空格
+            foreach (string currLine in questLib)
+            {
+                string noSpaceLine = currLine.Replace(" ", "");
+                if (noSpaceLine.Contains(value))   //若包含内容
+                {
+                    int stopIndex = currLine.IndexOf(".");
+                    result = currLine.Substring(0, stopIndex);
+                }
+            }
+            return result;
+        }
     }
 }
