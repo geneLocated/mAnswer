@@ -16,5 +16,21 @@ namespace 匹配答案
         {
             InitializeComponent();
         }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            ClickSend();
+        }
+
+        private void ClickSend()
+        {
+            //实现点击发送按钮
+            HtmlElementCollection html = webBrowser1.Document.GetElementsByTagName("button");
+            foreach (HtmlElement item in html)
+            {
+                if (item.InnerText == "发送")
+                    item.InvokeMember("onclick");
+            }
+        }
     }
 }

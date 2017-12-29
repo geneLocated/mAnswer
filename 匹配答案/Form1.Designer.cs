@@ -51,6 +51,7 @@
             this.startButton.TabIndex = 1;
             this.startButton.Text = "开始匹配";
             this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // label1
             // 
