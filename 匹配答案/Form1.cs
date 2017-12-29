@@ -19,6 +19,7 @@ namespace 匹配答案
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            ClickAns("A");
             ClickSend();
         }
 
@@ -30,6 +31,21 @@ namespace 匹配答案
             {
                 if (item.InnerText == "发送")
                     item.InvokeMember("onclick");
+            }
+        }
+
+        private void ClickAns(string ans)
+        {
+            //点击答案
+            HtmlElementCollection answers = webBrowser1.Document.GetElementsByTagName("span");
+            foreach (HtmlElement item in answers)
+            {
+                if(item.InnerText != null)
+                    if (item.InnerText.Contains(ans+"."))
+                    {
+                        item.InvokeMember("onclick");
+                        break;  //有很多答案按钮，这里点击第一个就可以了
+                    }
             }
         }
     }
