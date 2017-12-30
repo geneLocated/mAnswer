@@ -16,6 +16,7 @@ namespace 匹配答案
         public Form1()
         {
             InitializeComponent();
+            ReadQA();
         }
 
         List<string> questLib = new List<string>();
@@ -26,9 +27,17 @@ namespace 匹配答案
             timer1.Start();
         }
 
+        string lastQuest = null;
         private void timer1_Tick(object sender, EventArgs e)
         {
-
+            string thisQuest = GetQuest();
+            if (lastQuest != thisQuest)
+            {
+                string thisAns = FindInAns(FindInQuest(thisQuest));
+                ClickAns(thisAns);
+                ClickSend();
+                lastQuest = thisQuest;
+            }
         }
 
         #region 网页操作
@@ -66,10 +75,11 @@ namespace 匹配答案
             foreach (HtmlElement item in questDiv)
             {
                 if (item.GetAttribute("className") == "answer_text")
-                    if (item.FirstChild.InnerText.Contains("."))    //避免识别到“恭喜你答对了”
+                    if (item.FirstChild.InnerText.Contains(".")
+                        || item.FirstChild.InnerText.Contains("．"))    //避免识别到“恭喜你答对了”
                     {
                         str = item.FirstChild.InnerText;
-                        str = str.Substring(str.IndexOf(".") + 1, str.IndexOf("\n"));
+                        str = str.Substring(str.IndexOf(".") + 1, str.IndexOf("\r\n") - 2);
                     }
             }
             return str;
@@ -93,14 +103,14 @@ namespace 匹配答案
         {
             //根据内容找题号
             string result = null;
-            value = value.Replace(" ", ""); //去除值中的空格
+            value = FormatStr(value);
             foreach (string currLine in questLib)
             {
-                string noSpaceLine = currLine.Replace(" ", "");
-                if (noSpaceLine.Contains(value))   //若包含内容
+                string formatLine = FormatStr(currLine);
+                if (formatLine.Contains(value))   //若包含内容
                 {
-                    int stopIndex = currLine.IndexOf(".");
-                    result = currLine.Substring(0, stopIndex);
+                    int stopIndex = formatLine.IndexOf(".");
+                    result = formatLine.Substring(0, stopIndex);
                 }
             }
             return result;
@@ -122,6 +132,22 @@ namespace 匹配答案
                 }
             }
             return result;
+        }
+
+        private string FormatStr(string str)
+        {
+            str = str.Replace("[多选]", "");
+            str = str.Replace(":", ".");
+            str = str.Replace("\r", "");
+            str = str.Replace("　", "");
+            str = str.Replace("(", "");
+            str = str.Replace(")", "");
+            str = str.Replace("（", "");
+            str = str.Replace("）", "");
+            str = str.Replace("_", "");
+            str = str.Replace("c", "");
+            str = str.Replace(" ", "");
+            return str;
         }
         #endregion
     }
