@@ -34,7 +34,8 @@ namespace 匹配答案
             if (lastQuest != thisQuest)
             {
                 string thisAns = FindInAns(FindInQuest(thisQuest));
-                ClickAns(thisAns);
+                foreach (char opt in thisAns)
+                    ClickAns(opt);  //点击所有选项
                 ClickSend();
                 lastQuest = thisQuest;
             }
@@ -52,19 +53,19 @@ namespace 匹配答案
             }
         }
 
-        private void ClickAns(string ans)
+        private void ClickAns(char ans)
         {
             //点击答案
-            HtmlElementCollection answers = webBrowser1.Document.GetElementsByTagName("span");
-            foreach (HtmlElement item in answers)
+            HtmlElementCollection spans = webBrowser1.Document.GetElementsByTagName("span");
+            List<HtmlElement> ansList = new List<HtmlElement>();
+            foreach (HtmlElement item in spans)
             {
                 if(item.InnerText != null)
                     if (item.InnerText.Contains(ans+"."))
-                    {
-                        item.InvokeMember("onclick");
-                        break;  //有很多答案按钮，这里点击第一个就可以了
-                    }
+                        ansList.Add(item);
             }
+            //点击最后一个按钮
+            ansList.Last().InvokeMember("onclick");
         }
 
         private string GetQuest()
