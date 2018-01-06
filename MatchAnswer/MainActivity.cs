@@ -54,6 +54,9 @@ namespace MatchAnswer
             stopButton.Enabled = false;
         }
 
+        ShapeDrawable dr0;
+        ShapeDrawable dr1;
+
         LinearLayout floatLayout;   //浮动窗口布局
         private IWindowManager MWindowManager
         {
@@ -66,16 +69,17 @@ namespace MatchAnswer
         {
             this.floatLayout = new LinearLayout(this);
             var shape = new OvalShape();
-            var dr = new ShapeDrawable(shape);
-            dr.Paint.Color = Color.WhiteSmoke;
-            dr.Paint.Alpha = 100;
-            floatLayout.Background = dr;
+            dr0 = new ShapeDrawable(shape);
+            dr0.Paint.Color = Color.DarkGray;
+            dr1 = new ShapeDrawable(shape);
+            dr1.Paint.Color = Color.DarkBlue;
+            floatLayout.Background = dr0;
 
             var param = new WindowManagerLayoutParams
             {
                 Type = WindowManagerTypes.Phone,
                 Format = Android.Graphics.Format.Transparent,
-                Gravity = GravityFlags.Top | GravityFlags.Left, //原点
+                Gravity = GravityFlags.Bottom | GravityFlags.Left, //原点
                 Flags = WindowManagerFlags.NotFocusable,    //不可聚焦
                 Width = 100,    //宽度
                 Height = 100,   //高度
@@ -146,6 +150,7 @@ namespace MatchAnswer
             timer = new Timer(new TimerCallback(Timer_Tick), null, 100, 600);
         }
 
+        bool bgColorStatus = false;
         public void Timer_Tick(object sender)
         {
             RunOnUiThread(() =>
@@ -162,6 +167,11 @@ namespace MatchAnswer
                     catch { tv.Text = "null"; }
                     floatLayout.RemoveAllViews();
                     floatLayout.AddView(tv);
+                    if (bgColorStatus)
+                        floatLayout.Background = dr1;
+                    else
+                        floatLayout.Background = dr0;
+                    bgColorStatus = !bgColorStatus;
                 }
                 lastClipText = clipText;
             });
