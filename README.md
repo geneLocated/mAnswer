@@ -16,3 +16,7 @@ msbuild
 生成的程序可在 `.\匹配答案\bin` 下找到。  
 
 ![Screenshot](https://user-images.githubusercontent.com/31200881/38315003-1caf024c-385a-11e8-8846-d26cb3438ab0.PNG)
+
+## 许可协议
+
+[MIT](./LICENSE)
