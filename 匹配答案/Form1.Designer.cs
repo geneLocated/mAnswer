@@ -43,7 +43,7 @@
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.Size = new System.Drawing.Size(634, 720);
             this.webBrowser1.TabIndex = 0;
-            this.webBrowser1.Url = new System.Uri("http://jyj.hizh.cn/index.php?s=/addon/AnswerDraw/Wapapi/PCzhjy.html", System.UriKind.Absolute);
+            this.webBrowser1.Url = new System.Uri("http://paxy.hizh.cn/index.php?s=/addon/AnswerDraw/Wapapi/PCzhjy.html", System.UriKind.Absolute);
             // 
             // startButton
             // 
@@ -62,7 +62,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(407, 12);
             this.label1.TabIndex = 2;
-            this.label1.Text = "http://jyj.hizh.cn/index.php?s=/addon/AnswerDraw/Wapapi/PCzhjy.html";
+            this.label1.Text = "http://paxy.hizh.cn/index.php?s=/addon/AnswerDraw/Wapapi/PCzhjy.html";
             // 
             // timer1
             // 
